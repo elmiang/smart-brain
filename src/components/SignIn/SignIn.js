@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
-const SignIn = ({ onRouteChange }) => {
+const SignIn = ({ onRouteChange, loadUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   const onEmailChange = (event) => {
     setEmail(event.target.value);
@@ -14,19 +14,21 @@ const SignIn = ({ onRouteChange }) => {
   }
 
   const onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
-      method: 'post',
+    const data = {
+      email: email,
+      password: password
+    }
+    axios.post('http://localhost:3000/signin', data, {
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
     })
-      .then(res => res.json())
-      .then(data => {
-        if (data === 'Success') {
+      .then(user => {
+        if (user.data.id) {
+          loadUser(user.data)
           onRouteChange('home');
         }
+      })
+      .catch(err => {
+        console.log(err);
       });
   }
 
