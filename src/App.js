@@ -51,7 +51,7 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      box: {},
+      box: [],
       route: 'signin',
       isSignedIn: false,
       user: {
@@ -69,7 +69,7 @@ class App extends Component {
   getInitialState = () => ({
     input: '',
     imageUrl: '',
-    box: {},
+    box: [],
     route: 'signin',
     isSignedIn: false,
     user: {
@@ -108,16 +108,28 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    const facePos = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("inputImage");
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: facePos.left_col * width,
-      topRow: facePos.top_row * height,
-      rightCol: width - (facePos.right_col * width),
-      bottomRow: height - (facePos.bottom_row * height),
-    }
+    const facePositions = [];
+
+    data.outputs[0].data.regions.forEach(region => {
+      const { left_col, top_row, right_col, bottom_row } = region.region_info.bounding_box;
+      facePositions.push({
+        leftCol: left_col * width,
+        topRow: top_row * height,
+        rightCol: width - (right_col * width),
+        bottomRow: height - (bottom_row * height),
+      })
+    });
+    return facePositions;
+    // const facePos = data.outputs[0].data.regions[0].region_info.bounding_box;
+    // return {
+    //   leftCol: facePos.left_col * width,
+    //   topRow: facePos.top_row * height,
+    //   rightCol: width - (facePos.right_col * width),
+    //   bottomRow: height - (facePos.bottom_row * height),
+    // }
   }
 
   displayFaceBox = (box) => {
@@ -164,7 +176,7 @@ class App extends Component {
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
               />
-              <FaceRecognition box={box} imageLink={imageUrl} />
+              <FaceRecognition boxes={box} imageLink={imageUrl} />
             </div>
           : (
               route === 'signin' 
