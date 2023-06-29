@@ -65,6 +65,23 @@ class App extends Component {
     }
   }
 
+  //Returns a copy of the initial state for resetting purposes
+  getInitialState = () => ({
+    input: '',
+    imageUrl: '',
+    box: {},
+    route: 'signin',
+    isSignedIn: false,
+    user: {
+      id: '',
+      name: '',
+      email: '',
+      password: '',
+      entries: 0,
+      joined: ''
+    }
+  });
+
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
@@ -76,9 +93,14 @@ class App extends Component {
     }});
   }
 
+  resetState = () => {
+    this.setState(this.getInitialState());
+  }
+
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false});
+      this.resetState();
+      return;
     } else if (route === 'home') {
       this.setState({isSignedIn: true});
     }
