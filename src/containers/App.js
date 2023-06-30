@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import ParticleBackground from './components/ParticleBackground';
-import Navigation from './components/Navigation/Navigation';
-import Logo from './components/Logo/Logo';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
-import Rank from './components/Rank/Rank';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import SignIn from './components/SignIn/SignIn';
-import Register from './components/Register/Register';
+import ParticleBackground from '../components/ParticleBackground';
+import Navigation from '../components/Navigation/Navigation';
+import Logo from '../components/Logo/Logo';
+import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
+import Rank from '../components/Rank/Rank';
+import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
+import UserForm from '../components/UserForm';
 import './App.css';
 import axios from 'axios';
 
@@ -45,42 +44,31 @@ const returnClarifaiRequestOptions = (inputLink) => {
   return requestOptions;
 }
 
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: [],
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    password: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: [],
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        password: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
-  //Returns a copy of the initial state for resetting purposes
-  getInitialState = () => ({
-    input: '',
-    imageUrl: '',
-    box: [],
-    route: 'signin',
-    isSignedIn: false,
-    user: {
-      id: '',
-      name: '',
-      email: '',
-      password: '',
-      entries: 0,
-      joined: ''
-    }
-  });
+  getInitialState = () => {
+    return initialState;
+  };
 
   loadUser = (data) => {
     this.setState({user: {
@@ -123,13 +111,6 @@ class App extends Component {
       })
     });
     return facePositions;
-    // const facePos = data.outputs[0].data.regions[0].region_info.bounding_box;
-    // return {
-    //   leftCol: facePos.left_col * width,
-    //   topRow: facePos.top_row * height,
-    //   rightCol: width - (facePos.right_col * width),
-    //   bottomRow: height - (facePos.bottom_row * height),
-    // }
   }
 
   displayFaceBox = (box) => {
@@ -150,7 +131,8 @@ class App extends Component {
           })
           .then(count => {
             this.setState(Object.assign(this.state.user, { entries: count.data }));
-          });
+          })
+          .catch(error => console.log('error', error));
         }
         return response.json();
       })
@@ -179,9 +161,7 @@ class App extends Component {
               <FaceRecognition boxes={box} imageLink={imageUrl} />
             </div>
           : (
-              route === 'signin' 
-              ? <SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser}/> 
-              : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
+              <UserForm type={route} onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
             )
         }
       </div>
