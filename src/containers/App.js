@@ -9,41 +9,6 @@ import UserForm from '../components/UserForm';
 import './App.css';
 import axios from 'axios';
 
-const MODEL_ID = 'face-detection';   
-const returnClarifaiRequestOptions = (inputLink) => {
-  const PAT = '15be52e14b484b9db71bda8b6f070bee';
-  const USER_ID = 'elmiang';       
-  const APP_ID = 'smartbrain';
-  const IMAGE_URL = inputLink;
-
-  const raw = JSON.stringify({
-    "user_app_id": {
-      "user_id": USER_ID,
-      "app_id": APP_ID
-    },
-    "inputs": [
-      {
-        "data": {
-          "image": {
-            "url": IMAGE_URL
-          }
-        }
-      }
-    ]
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-
-  return requestOptions;
-}
-
 const initialState = {
   input: '',
   imageUrl: '',
@@ -100,7 +65,7 @@ class App extends Component {
     const width = Number(image.width);
     const height = Number(image.height);
     const facePositions = [];
-
+    
     data.outputs[0].data.regions.forEach(region => {
       const { left_col, top_row, right_col, bottom_row } = region.region_info.bounding_box;
       facePositions.push({
@@ -123,21 +88,23 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", returnClarifaiRequestOptions(this.state.input))
-      .then(response => {
-        if (response) {
-          axios.put('http://localhost:3000/image', {id: this.state.user.id}, {
-            headers: {'Content-Type': 'application/json'}
-          })
-          .then(count => {
-            this.setState(Object.assign(this.state.user, { entries: count.data }));
-          })
-          .catch(error => console.log('error', error));
-        }
-        return response.json();
-      })
-      .then(result => this.displayFaceBox(this.calculateFaceLocation(result)))
-      .catch(error => console.log('error', error));
+    axios.post('http://localhost:3000/imageurl', {input: this.state.input}, {
+      headers: {'Content-Type': 'application/json'}
+    })
+    .then(response => {
+      if (response) {
+        axios.put('http://localhost:3000/image', {id: this.state.user.id}, {
+          headers: {'Content-Type': 'application/json'}
+        })
+        .then(count => {
+          this.setState(Object.assign(this.state.user, { entries: count.data }));
+        })
+        .catch(error => console.log('error', error));
+      }
+      return response.data;
+    })
+    .then(data => this.displayFaceBox(this.calculateFaceLocation(data)))
+    .catch(error => console.log('error', error));
   }
 
   
