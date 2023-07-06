@@ -24,7 +24,7 @@ const Register = ({ type, onRouteChange, loadUser }) => {
       email: email,
       password: password
     }
-    axios.post('http://localhost:3000/register', data, {
+    axios.post(`${process.env.SERVER_URL}/register`, data, {
       headers: {'Content-Type': 'application/json'},
     })
       .then(user => {
@@ -43,7 +43,7 @@ const Register = ({ type, onRouteChange, loadUser }) => {
       email: email,
       password: password
     }
-    axios.post('http://localhost:3000/signin', data, {
+    axios.post(`${process.env.SERVER_URL}/signin`, data, {
       headers: {'Content-Type': 'application/json'},
     })
       .then(user => {
