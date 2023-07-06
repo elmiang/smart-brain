@@ -88,12 +88,12 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    axios.post(`${process.env.SERVER_URL}/imageurl`, {input: this.state.input}, {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/imageurl`, {input: this.state.input}, {
       headers: {'Content-Type': 'application/json'}
     })
     .then(response => {
       if (response) {
-        axios.put(`${process.env.SERVER_URL}/image`, {id: this.state.user.id}, {
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/image`, {id: this.state.user.id}, {
           headers: {'Content-Type': 'application/json'}
         })
         .then(count => {
