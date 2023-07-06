@@ -4,8 +4,12 @@ on:
     branches:
       - main
 jobs:
-  deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm install  
       - name: GH Pages Deploy
         run: npm run deploy
