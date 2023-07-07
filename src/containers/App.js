@@ -88,7 +88,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    console.log("server url:", REACT_APP_SERVER_URL);
+    console.log("server url:", process.env.REACT_APP_SERVER_URL);
     axios.post(`${process.env.REACT_APP_SERVER_URL}/imageurl`, {input: this.state.input}, {
       headers: {'Content-Type': 'application/json'}
     })
