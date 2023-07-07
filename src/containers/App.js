@@ -110,6 +110,10 @@ class App extends Component {
   
   render() {
     const { isSignedIn, route, box, imageUrl, user } = this.state;
+
+    //Test backend connection
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/`)
+      .then(response => console.log(response));
     return (
       <div className="App">
         <ParticleBackground />
