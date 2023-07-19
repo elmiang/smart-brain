@@ -113,7 +113,11 @@ class App extends Component {
 
     //Test backend connection
     axios.get(`${process.env.REACT_APP_SERVER_URL}/`)
-      .then(response => console.log(response));
+      .then(response => console.log(response.data));
+
+    //Test GET Request
+    axios.get("swapi.dev/api/vehicles")
+      .then(response => console.log(response.data));
     return (
       <div className="App">
         <ParticleBackground />
