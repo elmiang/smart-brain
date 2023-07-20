@@ -115,9 +115,15 @@ class App extends Component {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/`)
       .then(response => console.log(response.data));
 
+    fetch(`${process.env.REACT_APP_SERVER_URL}/`)
+      .then(response => console.log(response));
+
     //Test GET Request
     axios.get("swapi.dev/api/vehicles")
       .then(response => console.log(response.data));
+    fetch("swapi.dev/api/vehicles")
+      .then(response => console.log(response));
+
     return (
       <div className="App">
         <ParticleBackground />
