@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import axios from 'axios';
 import ParticleBackground from '../components/ParticleBackground';
 import Navigation from '../components/Navigation/Navigation';
-import Logo from '../components/Logo/Logo';
-import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
-import Rank from '../components/Rank/Rank';
-import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
+import Home from '../pages/Home';
 import UserForm from '../components/UserForm';
 import './App.css';
-import axios from 'axios';
 
 const initialState = {
   input: '',
   imageUrl: '',
   box: [],
-  route: 'signin',
   isSignedIn: false,
   user: {
     id: '',
@@ -48,16 +45,6 @@ class App extends Component {
 
   resetState = () => {
     this.setState(this.getInitialState());
-  }
-
-  onRouteChange = (route) => {
-    if (route === 'signout') {
-      this.resetState();
-      return;
-    } else if (route === 'home') {
-      this.setState({isSignedIn: true});
-    }
-    this.setState({route: route});
   }
 
   calculateFaceLocation = (data) => {
@@ -107,35 +94,49 @@ class App extends Component {
     .catch(error => console.log('error', error));
   }
 
-  
   render() {
-    const { isSignedIn, route, box, imageUrl, user } = this.state;
-
-    //Test backend connection
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/`)
-      .then(response => console.log(response.data));
-
+    const { box, imageUrl, user } = this.state;
     return (
       <div className="App">
         <ParticleBackground />
-        <Navigation 
-          onRouteChange={this.onRouteChange}
-          isSignedIn={isSignedIn}
-        />
-        {route === 'home' 
-          ? <div>
-              <Logo />
-              <Rank userName={user.name} userEntries={user.entries}/>
-              <ImageLinkForm 
-                onInputChange={this.onInputChange} 
-                onButtonSubmit={this.onButtonSubmit}
-              />
-              <FaceRecognition boxes={box} imageLink={imageUrl} />
-            </div>
-          : (
-              <UserForm type={route} onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
-            )
-        }
+        <BrowserRouter>
+          <Navigation 
+            resetState={this.resetState}
+            id={user.id}
+          />
+          <Routes>
+            <Route path="/" element={<Navigate to="login"/>}/>
+            <Route path="/home" 
+              element={
+                <Home 
+                  user={user} 
+                  box={box}  
+                  imageUrl={imageUrl}
+                  onInputChange={this.onInputChange}
+                  onButtonSubmit={this.onButtonSubmit} 
+                />
+              }
+            />
+            <Route path="/login" 
+              element={
+                <UserForm
+                  type='login'
+                  onRouteChange={this.onRouteChange}
+                  loadUser={this.loadUser}
+                />
+              }
+            />
+            <Route path="/register" 
+              element={
+                <UserForm
+                  type='register'
+                  onRouteChange={this.onRouteChange}
+                  loadUser={this.loadUser}
+                />
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </div>
     );
   }

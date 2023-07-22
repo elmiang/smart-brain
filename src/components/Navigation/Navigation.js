@@ -1,14 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Navigation = ({ onRouteChange, isSignedIn}) => {
+const Navigation = ({ resetState, id}) => {
+  const navigate = useNavigate();
+
+  const logoutUser = () => {
+    resetState();
+    navigate('login', { replace: true });
+  }
+
   return(
-    (isSignedIn 
+    (id 
       ? <nav className="flex flex-column items-end">
-          <p onClick={() => onRouteChange('signout')} className="f3 link dim black underline pa3 pointer">Sign Out</p>
+          <p onClick={() => logoutUser()} className="f3 link dim black underline pa3 pointer">Sign Out</p>
         </nav>
       : <nav className="flex flex-row justify-end">
-          <p onClick={() => onRouteChange('signin')} className="f3 link dim black underline pa3 pointer">Sign In</p>
-          <p onClick={() => onRouteChange('register')} className="f3 link dim black underline pa3 pointer">Register</p>
+          <p onClick={() => navigate('login', { replace: true })} className="f3 link dim black underline pa3 pointer">Sign In</p>
+          <p onClick={() => navigate('register', { replace: true })} className="f3 link dim black underline pa3 pointer">Register</p>
         </nav>
     )
   );

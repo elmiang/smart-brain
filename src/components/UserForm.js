@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-const Register = ({ type, onRouteChange, loadUser }) => {
+const UserForm = ({ type, onRouteChange, loadUser }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const onNameChange = (event) => {
     setName(event.target.value);
@@ -30,7 +33,7 @@ const Register = ({ type, onRouteChange, loadUser }) => {
       .then(user => {
         if (user) {
           loadUser(user.data);
-          onRouteChange('home');
+          navigate('/home', { replace: true });
         }
       })
       .catch(err => {
@@ -49,7 +52,7 @@ const Register = ({ type, onRouteChange, loadUser }) => {
       .then(user => {
         if (user.data.id) {
           loadUser(user.data)
-          onRouteChange('home');
+          navigate('/home', { replace: true });
         }
       })
       .catch(err => {
@@ -97,13 +100,18 @@ const Register = ({ type, onRouteChange, loadUser }) => {
             </div>
           </fieldset>
           {type === 'register' 
-          ? <div className="">
-              <input 
-                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
-                type="submit" 
-                value="Register"
-                onClick={onSubmitRegister}
-              />
+          ? <div>
+              <div className="">
+                <input 
+                  className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
+                  type="submit" 
+                  value="Register"
+                  onClick={onSubmitRegister}
+                />
+              </div>
+              <div className="lh-copy mt3">
+                <p onClick={() => navigate('/login', { replace: true })} href="#0" className="f6 link dim black pointer db">Sign in</p>
+              </div>
             </div>
           : (
               <div>
@@ -116,7 +124,7 @@ const Register = ({ type, onRouteChange, loadUser }) => {
                   />
                 </div>
                 <div className="lh-copy mt3">
-                  <p onClick={() => onRouteChange('register')} href="#0" className="f6 link dim black pointer db">Register</p>
+                  <p onClick={() => navigate('/register', { replace: true })} href="#0" className="f6 link dim black pointer db">Register</p>
                 </div>
               </div>
             )
@@ -127,4 +135,4 @@ const Register = ({ type, onRouteChange, loadUser }) => {
   );
 }
 
-export default Register;
+export default UserForm;
