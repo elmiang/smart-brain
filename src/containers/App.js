@@ -5,6 +5,7 @@ import ParticleBackground from '../components/ParticleBackground';
 import Navigation from '../components/Navigation/Navigation';
 import Home from '../pages/Home';
 import UserForm from '../components/UserForm';
+import Leaderboard from '../components/Leaderboard/Leaderboard';
 import './App.css';
 
 const initialState = {
@@ -133,6 +134,11 @@ class App extends Component {
                   onRouteChange={this.onRouteChange}
                   loadUser={this.loadUser}
                 />
+              }
+            />
+            <Route path="/leaderboard"
+              element={
+                <Leaderboard loggedUser={user}/>
               }
             />
           </Routes>
