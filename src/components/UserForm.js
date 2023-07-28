@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-const UserForm = ({ type, onRouteChange, loadUser }) => {
+const UserForm = ({ type, loadUser }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [formErrors, setFormErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -27,6 +28,10 @@ const UserForm = ({ type, onRouteChange, loadUser }) => {
       email: email,
       password: password
     }
+    setFormErrors(validate(data));
+    if (Object.keys(formErrors).length > 0) {
+      return;
+    }
     axios.post(`${process.env.REACT_APP_SERVER_URL}/register`, data, {
       headers: {'Content-Type': 'application/json'},
     })
@@ -46,6 +51,9 @@ const UserForm = ({ type, onRouteChange, loadUser }) => {
       email: email,
       password: password
     }
+    if (Object.keys(formErrors).length > 0) {
+      return;
+    }
     axios.post(`${process.env.REACT_APP_SERVER_URL}/signin`, data, {
       headers: {'Content-Type': 'application/json'},
     })
@@ -54,10 +62,31 @@ const UserForm = ({ type, onRouteChange, loadUser }) => {
           loadUser(user.data)
           navigate('/home', { replace: true });
         }
+        else {
+          setFormErrors({login: "Username or password incorrect"});
+        }
       })
       .catch(err => {
         console.log(err);
       });
+  }
+
+  const validate = (values) => {
+    const errors = {};
+
+    if (!values.name) {
+      errors.name = "Name cannot be empty";
+    }
+    if (!values.email) {
+      errors.email = "Password cannot be empty";
+    }
+    else if (!email.includes("@")) {
+      errors.email = "Email is in invalid format";
+    }
+    if (!values.password) {
+      errors.password = "Password cannot be empty";
+    }
+    return errors;
   }
 
   return(
@@ -76,6 +105,7 @@ const UserForm = ({ type, onRouteChange, loadUser }) => {
                       id="name"
                       onChange={onNameChange}
                     />
+                    <p>{formErrors.name}</p>
                   </div>
             }
             <div className="mt3">
@@ -87,6 +117,7 @@ const UserForm = ({ type, onRouteChange, loadUser }) => {
                 id="email-address"
                 onChange={onEmailChange}
               />
+              <p>{formErrors.email}</p>
             </div>
             <div className="mv3">
               <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
@@ -97,6 +128,7 @@ const UserForm = ({ type, onRouteChange, loadUser }) => {
                 id="password"
                 onChange={onPasswordChange}
               />
+              <p>{formErrors.password}</p>
             </div>
           </fieldset>
           {type === 'register' 
@@ -129,6 +161,7 @@ const UserForm = ({ type, onRouteChange, loadUser }) => {
               </div>
             )
           }
+          <p>{formErrors.login}</p>
         </div>
       </main>
     </article>
