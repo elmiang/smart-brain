@@ -122,7 +122,6 @@ class App extends Component {
               element={
                 <UserForm
                   type='login'
-                  onRouteChange={this.onRouteChange}
                   loadUser={this.loadUser}
                 />
               }
@@ -131,7 +130,6 @@ class App extends Component {
               element={
                 <UserForm
                   type='register'
-                  onRouteChange={this.onRouteChange}
                   loadUser={this.loadUser}
                 />
               }
