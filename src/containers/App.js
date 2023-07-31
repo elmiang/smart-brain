@@ -12,7 +12,6 @@ const initialState = {
   input: '',
   imageUrl: '',
   box: [],
-  isSignedIn: false,
   user: {
     id: '',
     name: '',
@@ -40,7 +39,8 @@ class App extends Component {
       email: data.email,
       password: data.password,
       entries: data.entries,
-      joined: data.joined
+      joined: data.joined,
+      faces: data.faces
     }});
   }
 
@@ -82,11 +82,22 @@ class App extends Component {
     .then(response => {
       if (response) {
         console.log(response);
-        axios.put(`${process.env.REACT_APP_SERVER_URL}/image`, {id: this.state.user.id}, {
+        //Increment user image entries
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/imageEntries`, {id: this.state.user.id}, {
           headers: {'Content-Type': 'application/json'}
         })
         .then(count => {
           this.setState(Object.assign(this.state.user, { entries: count.data }));
+        })
+        .catch(error => console.log('error', error));
+
+        //Increment user image face count
+        const faceCount = response.data.outputs[0].data.regions.length;
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/imageFaces`, {id: this.state.user.id, faces: faceCount}, {
+          headers: {'Content-Type': 'application/json'}
+        })
+        .then(count => {
+          this.setState(Object.assign(this.state.user, { faces: count.data }));
         })
         .catch(error => console.log('error', error));
       }

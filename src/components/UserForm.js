@@ -43,6 +43,7 @@ const UserForm = ({ type, loadUser }) => {
         }
       })
       .catch(err => {
+        setFormErrors({register: "Registration failed"});
         console.log(err);
       });
   }
@@ -79,7 +80,8 @@ const UserForm = ({ type, loadUser }) => {
   const validate = (values) => {
     const errors = {};
 
-    if (!values.name) {
+    //Name property does not exist in login
+    if (values?.name === "") {
       errors.name = "Name cannot be empty";
     }
     if (!values.email) {
@@ -166,7 +168,7 @@ const UserForm = ({ type, loadUser }) => {
               </div>
             )
           }
-          <span>{formErrors.login}</span>
+          <span>{formErrors.login || formErrors.register}</span>
         </div>
       </main>
     </article>

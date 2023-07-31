@@ -35,3 +35,43 @@
 #currentuser {
   background-color:#C0C0C0;
 }
+
+.controls a {
+  border: 2px solid black;
+  color: black;
+  font-size: 16px;
+  padding: 16px 32px;
+  display: inline-block;
+  text-align: center;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+
+}
+
+.button1:hover {
+  background-color: #8A2BE2;
+  color:white;
+}
+
+.button1:active {
+  background-color: #8A2BE2;
+  color:white;
+}
+
+.button2 {
+
+}
+
+.button2:hover {
+  background-color: #00BFFF;
+  color: white;
+}
+
+.button2:active {
+  background-color: #00BFFF;
+  color: white;
+}

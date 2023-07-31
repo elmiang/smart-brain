@@ -1,8 +1,9 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navigation = ({ resetState, id}) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const logoutUser = () => {
     resetState();
@@ -12,6 +13,9 @@ const Navigation = ({ resetState, id}) => {
   return(
       (id 
         ? <nav className="flex flex-row justify-end">
+            {location.pathname === '/leaderboard' && 
+              <p onClick={() => navigate('/home', { replace: true })} className="f3 link dim black underline pa3 pointer">Smartbrain</p>
+            }
             <p onClick={() => navigate('/leaderboard', { replace: true })} className="f3 link dim black underline pa3 pointer">Leaderboard</p>
             <p onClick={() => logoutUser()} className="f3 link dim black underline pa3 pointer">Sign Out</p>
           </nav>
