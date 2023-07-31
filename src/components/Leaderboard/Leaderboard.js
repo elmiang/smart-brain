@@ -7,12 +7,12 @@ const faceRankings = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rankin
 
 let rankingsData = entryRankings;
 
-if (rankingType === "entries") {
-  rankingsData = entryRankings;
-}
-else {
-  rankingsData = faceRankings
-}
+// if (rankingType === "entries") {
+//   rankingsData = entryRankings;
+// }
+// else {
+//   rankingsData = faceRankings
+// }
 
 const rankings = rankingsData.data.map((user, index) => {
   const { name, entries, faces } = user; 
