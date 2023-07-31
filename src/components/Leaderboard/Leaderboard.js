@@ -2,7 +2,7 @@ import React from "react";
 import './Leaderboard.css';
 import axios from "axios";
 
-const rankingsData = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rankings`);
+const rankingsData = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rankings/entries`);
 const rankings = rankingsData.data.map((user, index) => {
   const { name, entries } = user; 
   return (

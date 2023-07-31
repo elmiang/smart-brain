@@ -81,6 +81,7 @@ class App extends Component {
     })
     .then(response => {
       if (response) {
+        console.log(response);
         axios.put(`${process.env.REACT_APP_SERVER_URL}/image`, {id: this.state.user.id}, {
           headers: {'Content-Type': 'application/json'}
         })
