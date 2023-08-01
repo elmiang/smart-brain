@@ -57,7 +57,7 @@ const Leaderboard = ({ loggedUser }) => {
   return(
     <div className="flex flex-column items-center">
       <div className="controls">
-        <input type="radio" id="entries" value="Entries" name="sortingType" defaultChecked={false} onClick={() => setEntriesSelection(true)}/>
+        <input type="radio" id="entries" value="Entries" name="sortingType" defaultChecked={true} onClick={() => setEntriesSelection(true)}/>
         <label htmlFor="entries">Entries</label>
         <input type="radio" id="faces" value="Faces" name="sortingType" onClick={() => setEntriesSelection(false)}/>
         <label htmlFor="faces">Faces</label>
