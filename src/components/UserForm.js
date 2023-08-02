@@ -39,6 +39,7 @@ const UserForm = ({ type, loadUser }) => {
       .then(user => {
         if (user) {
           loadUser(user.data);
+          sessionStorage.setItem('auth', JSON.stringify(user.data));
           navigate('/home', { replace: true });
         }
       })
@@ -62,7 +63,8 @@ const UserForm = ({ type, loadUser }) => {
     })
       .then(user => {
         if (user.data.id) {
-          loadUser(user.data)
+          loadUser(user.data);
+          sessionStorage.setItem('auth', JSON.stringify(user.data));
           navigate('/home', { replace: true });
         }
       })

@@ -44,6 +44,13 @@ class App extends Component {
     }});
   }
 
+  componentDidMount() {
+    const userData = JSON.parse(sessionStorage.getItem('auth'));
+    if (userData) {
+      this.loadUser(userData);
+    }
+  }
+
   resetState = () => {
     this.setState(this.getInitialState());
   }
@@ -81,7 +88,6 @@ class App extends Component {
     })
     .then(response => {
       if (response) {
-        console.log(response);
         //Increment user image entries
         axios.put(`${process.env.REACT_APP_SERVER_URL}/imageEntries`, {id: this.state.user.id}, {
           headers: {'Content-Type': 'application/json'}
