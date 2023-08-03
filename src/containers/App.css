@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  /* For Footer */
+  min-height: calc(100vh - 60px); 
 }
 
 .center {

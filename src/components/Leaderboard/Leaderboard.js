@@ -62,7 +62,7 @@ const Leaderboard = ({ loggedUser }) => {
         <input type="radio" id="faces" value="Faces" name="sortingType" onClick={() => setEntriesSelection(false)}/>
         <label htmlFor="faces">Faces</label>
       </div>
-      <table id="leaderboard">
+      <table className="leaderboard">
         <thead>
           <tr>
             <th className="rank">Rank</th>

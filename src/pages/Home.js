@@ -4,7 +4,7 @@ import Rank from "../components/Rank/Rank";
 import ImageLinkForm from "../components/ImageLinkForm/ImageLinkForm";
 import FaceRecognition from "../components/FaceRecognition/FaceRecognition";
 
-const Home = ({ user, box, imageUrl, onInputChange, onButtonSubmit }) => {
+const Home = ({ user, box, imageUrl, onInputChange, onButtonSubmit, buttonActivated }) => {
   return(
     <div>
       <Logo />
@@ -12,6 +12,7 @@ const Home = ({ user, box, imageUrl, onInputChange, onButtonSubmit }) => {
       <ImageLinkForm 
         onInputChange={onInputChange} 
         onButtonSubmit={onButtonSubmit}
+        buttonActivated={buttonActivated}
       />
       <FaceRecognition boxes={box} imageLink={imageUrl} />
     </div>

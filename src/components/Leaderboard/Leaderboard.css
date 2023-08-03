@@ -1,4 +1,4 @@
-#leaderboard {
+.leaderboard {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 60%
@@ -8,7 +8,7 @@
   width: 15%;
 }
 
-#leaderboard th {
+.leaderboard th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
@@ -18,13 +18,13 @@
   font-size: 20px;
 }
 
-#leaderboard td, th {
+.leaderboard td, th {
   border: 1px solid #ddd;
   padding: 24px;
   font-size: 18px;
 }
 
-#leaderboard tr:nth-child(even) {
+.leaderboard tr:nth-child(even) {
   background-color: #6495ED;
 }
 

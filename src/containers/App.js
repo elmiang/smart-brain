@@ -6,12 +6,14 @@ import Navigation from '../components/Navigation/Navigation';
 import Home from '../pages/Home';
 import UserForm from '../components/UserForm';
 import Leaderboard from '../components/Leaderboard/Leaderboard';
+import Footer from '../components/Footer/Footer';
 import './App.css';
 
 const initialState = {
   input: '',
   imageUrl: '',
   box: [],
+  buttonActivated: false,
   user: {
     id: '',
     name: '',
@@ -83,6 +85,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
+    this.setState({ buttonActivated: true });
     axios.post(`${process.env.REACT_APP_SERVER_URL}/imageurl`, {input: this.state.input}, {
       headers: {'Content-Type': 'application/json'}
     })
@@ -104,6 +107,7 @@ class App extends Component {
         })
         .then(count => {
           this.setState(Object.assign(this.state.user, { faces: count.data }));
+          this.setState({ buttonActivated: false });
         })
         .catch(error => console.log('error', error));
       }
@@ -116,49 +120,53 @@ class App extends Component {
   render() {
     const { box, imageUrl, user } = this.state;
     return (
-      <div className="App">
-        <ParticleBackground />
-        <BrowserRouter>
-          <Navigation 
-            resetState={this.resetState}
-            id={user.id}
-          />
-          <Routes>
-            <Route path="/" element={<Navigate to="login"/>}/>
-            <Route path="/home" 
-              element={
-                <Home 
-                  user={user} 
-                  box={box}  
-                  imageUrl={imageUrl}
-                  onInputChange={this.onInputChange}
-                  onButtonSubmit={this.onButtonSubmit} 
-                />
-              }
+      <div>
+        <div className="App">
+          <ParticleBackground />
+          <BrowserRouter>
+            <Navigation 
+              resetState={this.resetState}
+              id={user.id}
             />
-            <Route path="/login" 
-              element={
-                <UserForm
-                  type='login'
-                  loadUser={this.loadUser}
-                />
-              }
-            />
-            <Route path="/register" 
-              element={
-                <UserForm
-                  type='register'
-                  loadUser={this.loadUser}
-                />
-              }
-            />
-            <Route path="/leaderboard"
-              element={
-                <Leaderboard loggedUser={user}/>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navigate to="login"/>}/>
+              <Route path="/home" 
+                element={
+                  <Home 
+                    user={user} 
+                    box={box}  
+                    imageUrl={imageUrl}
+                    onInputChange={this.onInputChange}
+                    onButtonSubmit={this.onButtonSubmit} 
+                    buttonActivated={this.state.buttonActivated}
+                  />
+                }
+              />
+              <Route path="/login" 
+                element={
+                  <UserForm
+                    type='login'
+                    loadUser={this.loadUser}
+                  />
+                }
+              />
+              <Route path="/register" 
+                element={
+                  <UserForm
+                    type='register'
+                    loadUser={this.loadUser}
+                  />
+                }
+              />
+              <Route path="/leaderboard"
+                element={
+                  <Leaderboard loggedUser={user}/>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </div>
+        <Footer />
       </div>
     );
   }
