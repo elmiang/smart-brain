@@ -1,1 +1,1 @@
-[Smartbrain Website](smartbrain.website)
+[Smartbrain Website](https://www.smartbrain.website)
