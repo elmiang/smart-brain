@@ -63,13 +63,13 @@ class App extends Component {
     const height = Number(image.height);
     const facePositions = [];
     
-    data.outputs[0].data.regions.forEach(region => {
-      const { left_col, top_row, right_col, bottom_row } = region.region_info.bounding_box;
+    data.regionsList.forEach(region => {
+      const { leftCol, topRow, rightCol, bottomRow } = region.regionInfo.boundingBox;
       facePositions.push({
-        leftCol: left_col * width,
-        topRow: top_row * height,
-        rightCol: width - (right_col * width),
-        bottomRow: height - (bottom_row * height),
+        leftCol: leftCol * width,
+        topRow: topRow * height,
+        rightCol: width - (rightCol * width),
+        bottomRow: height - (bottomRow * height),
       })
     });
     return facePositions;
@@ -101,7 +101,7 @@ class App extends Component {
         .catch(error => console.log('error', error));
 
         //Increment user image face count
-        const faceCount = response.data.outputs[0].data.regions.length;
+        const faceCount = response.data.regionsList.length;
         axios.put(`${process.env.REACT_APP_SERVER_URL}/imageFaces`, {id: this.state.user.id, faces: faceCount}, {
           headers: {'Content-Type': 'application/json'}
         })

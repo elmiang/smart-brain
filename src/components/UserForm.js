@@ -103,7 +103,7 @@ const UserForm = ({ type, loadUser }) => {
       <main className="pa4 black-80">
         <div className="measure">
           <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-            <legend className="f1 fw6 ph0 mh0">{type === 'register' ? "Register" : "Sign In"}</legend>
+            <legend className="f1 fw6 ph0 mh0 center">{type === 'register' ? "Register" : "Sign In"}</legend>
             {type === 'register' 
               &&  <div className="mt3">
                     <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
