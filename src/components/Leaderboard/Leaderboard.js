@@ -1,31 +1,36 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import './Leaderboard.css';
 import axios from "axios";
 
-const entryRankings = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rankings/entries`);
-const faceRankings = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rankings/faces`);
-
-let rankingsData = entryRankings;
-
 const Leaderboard = ({ loggedUser }) => {
   const [entriesSelected, setEntriesSelection] = useState(true);
+  const [rankingsData, setRankingsData] = useState([]);
 
   //Update rankings data source based on the filter selected
   useEffect(() => {
-    //Inverted statement is giving the correct results as opposed to the expected statement
-    //Something going on with react async state changes and rendering interaction?
-    if (!entriesSelected) {
-      rankingsData = entryRankings;
-    }
-    else {
-      rankingsData = faceRankings;
-    }
+    const setupRankingsData = async (isEntriesSelected) => {
+      let response = "";
+      try {
+        if (isEntriesSelected) {
+          response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rankings/entries`);
+        }
+        else {
+          response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rankings/faces`);
+        }
+        setRankingsData(response);
+      }
+      catch (error) {
+        console.error(error);
+      }
+   }
+
+   setupRankingsData(entriesSelected);
   }, [entriesSelected]);
 
-  let rankings = rankingsData.data.map((user, index) => {
+  let rankings = rankingsData?.data?.map((user, index) => {
     const { name, entries, faces } = user; 
     return (
-      <tr>
+      <tr key={index}>
         <td>{index + 1}</td>
         <td>{name}</td>
         <td>{entries}</td>
@@ -37,19 +42,19 @@ const Leaderboard = ({ loggedUser }) => {
   //Ranking data of the currently logged in user
   let currentRanking;
   if (loggedUser.id) {
-    let currentUser = rankingsData.data.filter(user => user.name === loggedUser.name)[0];
-    for (let i = 0; i < rankingsData.data.length; i++) {
-      if (currentUser.name === rankingsData.data[i].name) {
+    let currentUser = rankingsData?.data?.filter(user => user.name === loggedUser.name)[0];
+    for (let i = 0; i < rankingsData?.data?.length; i++) {
+      if (currentUser?.name === rankingsData?.data[i]?.name) {
         currentUser.index = i;
       }
     }
 
     currentRanking = (
-      <tr id="currentuser">
-        <td>{currentUser.index + 1}</td>
-        <td>{currentUser.name}</td>
-        <td>{currentUser.entries}</td>
-        <td>{currentUser.faces}</td>
+      <tr id="currentuser" key={currentUser?.index}>
+        <td>{currentUser?.index + 1}</td>
+        <td>{currentUser?.name}</td>
+        <td>{currentUser?.entries}</td>
+        <td>{currentUser?.faces}</td>
       </tr>
     )
   }
